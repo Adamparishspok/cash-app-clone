@@ -46,24 +46,37 @@ export function PhoneStage({ activeId, items }: PhoneStageProps) {
 
   const active = items.find((item) => item.id === activeId);
 
+  const portalIndices = new Set(items.map((item) => item.index));
+
   useStageScroll((scrollTop, viewportH) => {
     for (const item of items) {
       const el = videoRefs.current.get(item.id);
       if (!el) continue;
       const top = item.index * viewportH;
       /*
-       * The phone-silhouette mask is locked to the page scroll on BOTH ends
-       * of a section's traversal (mask-position: top var(--mask-top)): it
-       * slides up into the frame as the section arrives, sits at 0 while
-       * settled, then keeps sliding up on exit until only the bottom
-       * rounded cap remains as a sliver. Opacity only blinks on/off at the
-       * extremes — there is no gradual fade on the original.
+       * Entering (and settled): the video rises INSIDE the shared frame,
+       * clipped by its own phone mask sliding up from the section's scroll
+       * offset — over the previous video, which stays put and dims in
+       * place. The slide-out exit (mask keeps travelling up, leaving the
+       * bottom rounded cap as a sliver) only happens when the NEXT section
+       * has no phone; between two phone sections the exit is a fade.
        */
       const offset = Math.round(top - scrollTop);
-      const alpha = Math.abs(offset) < viewportH * 0.97 ? 1 : 0;
+      let maskY: number;
+      let alpha: number;
+      if (offset >= 0) {
+        maskY = offset;
+        alpha = offset < viewportH * 0.97 ? 1 : 0;
+      } else if (portalIndices.has(item.index + 1)) {
+        maskY = 0;
+        alpha = 1 - clamp01(-offset / viewportH / 0.6);
+      } else {
+        maskY = offset;
+        alpha = -offset < viewportH * 0.97 ? 1 : 0;
+      }
       el.style.opacity = `${alpha}`;
-      el.style.maskPosition = `0px ${offset}px`;
-      el.style.webkitMaskPosition = `0px ${offset}px`;
+      el.style.maskPosition = `0px ${maskY}px`;
+      el.style.webkitMaskPosition = `0px ${maskY}px`;
       el.style.visibility = alpha > 0 ? "visible" : "hidden";
     }
   });
@@ -108,9 +121,11 @@ export function PhoneStage({ activeId, items }: PhoneStageProps) {
               : "drop-shadow(0 4px 100px rgba(0,0,0,0.1))",
         }}
       >
+        {/* frame clip stays phone-shaped so a travelling mask edge never
+            exposes square corners */}
         <div
           className="relative h-[80dvh] overflow-hidden"
-          style={{ aspectRatio: "0.462141" }}
+          style={{ aspectRatio: "0.462141", borderRadius: "5dvh" }}
         >
           {items.map((item) => (
             <video
