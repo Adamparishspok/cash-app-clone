@@ -120,9 +120,16 @@ export function ScrollStage({
       const from = el.scrollTop;
       const to = tops[clamped];
       const duration = snapDuration(Math.abs(to - from), el.clientHeight);
-      const start = performance.now();
       if (animRef.current !== null) cancelAnimationFrame(animRef.current);
+      /*
+       * Clock starts on the first painted frame, not at call time: the
+       * first snap of a session also pays for theme/render/video-start
+       * work, and a pre-stamped start time would make the tween skip
+       * ahead by that setup cost on frame one.
+       */
+      let start: number | null = null;
       const step = (now: number) => {
+        if (start === null) start = now;
         const t = Math.min(1, (now - start) / duration);
         el.scrollTop = from + (to - from) * quadInOut(t);
         if (t < 1) {
