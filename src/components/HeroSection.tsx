@@ -83,9 +83,16 @@ export function HeroSection({ active }: HeroSectionProps) {
     // no overflow clip on the root: the morphing panel counter-scrolls
     // (translateY 92%) and must stay visible while the section scrolls away
     <div ref={rootRef} className="relative h-full">
+      {/*
+       * The panel is 160px taller than the section and starts above it
+       * (matching the original's 1512×958 @ y:-160 geometry): combined
+       * with the 92% counter-scroll, its box edges stay outside the
+       * viewport for the whole transition, so only the mask edge — the
+       * phone shape — is ever visible. No hard cutoffs.
+       */}
       <div
         ref={panelRef}
-        className="absolute inset-0 bg-[#00E013] [will-change:mask-size]"
+        className="absolute -top-[160px] right-0 left-0 h-[calc(100%+160px)] bg-[#00E013] [will-change:mask-size]"
         style={{
           maskImage: PHONE_MASK,
           WebkitMaskImage: PHONE_MASK,
