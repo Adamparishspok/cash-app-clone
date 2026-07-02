@@ -30,15 +30,18 @@ export function NavHeader({ theme, menuOpen, onMenuToggle }: NavHeaderProps) {
           className={cn(
             "size-[47px] [&_path]:transition-[fill] [&_path]:duration-300 [&_path]:ease-in-out [&_rect]:transition-[fill] [&_rect]:duration-300 [&_rect]:ease-in-out",
             /*
-             * The lockup path is a rounded-square frame with the $ as an
-             * evenodd hole; the rect shows through the hole.
-             * Hero (green bg): green frame blends in → black $ glyph.
-             * Light (white bg): green chip + white $ (rect goes white).
-             * Dark (black bg): green chip + black $ (rect goes black).
+             * The lockup path is a rounded-square CHIP with the $ as an
+             * evenodd hole; the rect shows through the hole. The chip color
+             * is what theme-swaps — the $ reads as the color behind it.
+             * Hero (green bg): black chip, $ hole shows the page green.
+             * Light (white bg): green chip + white $.
+             * Dark (black bg): green chip + black $.
              */
-            activeTheme === "light"
-              ? "[&_rect]:fill-white [&_path]:fill-[#00e013]"
-              : "[&_rect]:fill-black [&_path]:fill-[#00e013]"
+            isHero
+              ? "[&_rect]:fill-transparent [&_path]:fill-black"
+              : activeTheme === "light"
+                ? "[&_rect]:fill-white [&_path]:fill-[#00e013]"
+                : "[&_rect]:fill-black [&_path]:fill-[#00e013]"
           )}
         />
       </Link>

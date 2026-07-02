@@ -45,23 +45,27 @@ export function HeroSection({ active }: HeroSectionProps) {
     if (!root || !panel || !content) return;
 
     /*
-     * Exit scrub recovered from the original scroll-manager chunk, driven
-     * over the first viewport of scroll (p 0→1), all linear with scroll:
-     * - green panel: mask-scale 2×cover → 1 AND translateY 0 → 92% of its
-     *   height (it counter-scrolls, staying pinned while it shrinks);
-     *   opacity fades over p 0.6→1, hard-hidden at 0.99
+     * Exit scrub, driven over the first viewport of scroll (p 0→1), all
+     * linear with scroll:
+     * - green panel: mask-scale 2×cover → phone size AND translateY
+     *   0 → 92% of its height (it counter-scrolls, staying pinned while it
+     *   shrinks). It keeps FULL color the whole way — the collapse reads
+     *   as the green becoming the phone — and is only hard-hidden at 99%,
+     *   by which point the portal video has fully risen over it.
      * - content: translateY 0 → 50% + fade out over the first half
      *   (slow parallax exit against the page scroll)
      */
     const p = clamp01(scrollTop / viewportH);
     const coverScale =
       2 * Math.max(root.clientWidth / MASK_W, root.clientHeight / MASK_H);
-    const scale = lerp(coverScale, 1, p);
+    // final silhouette ≈ 64% of viewport height: the original's end size,
+    // and small enough to sit fully behind the 80vh PhoneStage frame
+    const phoneScale = (0.64 * root.clientHeight) / MASK_H;
+    const scale = lerp(coverScale, phoneScale, p);
     panel.style.maskSize = `${scale * MASK_W}px ${scale * MASK_H}px`;
     panel.style.webkitMaskSize = panel.style.maskSize;
     panel.style.transform = `translateY(${p * 92}%)`;
-    panel.style.opacity =
-      p >= 0.99 ? "0" : `${1 - clamp01((p - 0.6) / 0.4)}`;
+    panel.style.opacity = p >= 0.99 ? "0" : "1";
 
     const half = clamp01(p / 0.5);
     content.style.transform = `translateY(${half * 50}%)`;
