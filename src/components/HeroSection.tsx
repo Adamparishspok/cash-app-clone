@@ -76,7 +76,9 @@ export function HeroSection({ active }: HeroSectionProps) {
     );
 
   return (
-    <div ref={rootRef} className="relative h-full overflow-hidden">
+    // no overflow clip on the root: the morphing panel counter-scrolls
+    // (translateY 92%) and must stay visible while the section scrolls away
+    <div ref={rootRef} className="relative h-full">
       <div
         ref={panelRef}
         className="absolute inset-0 bg-[#00E013] [will-change:mask-size]"
