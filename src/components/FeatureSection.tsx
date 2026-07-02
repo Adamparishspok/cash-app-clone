@@ -68,7 +68,7 @@ export function FeatureSection({ config }: FeatureSectionProps) {
 
       {/* Legal disclaimer: bottom-left, 3vh above the section edge */}
       {config.legal ? (
-        <div className="absolute bottom-[3vh] left-[max(20px,calc((100vw-1440px)/2))] text-[0.75em] leading-[1.2] tracking-[-0.02em]">
+        <div className="absolute bottom-[3vh] left-5 text-[0.75em] leading-[1.2] tracking-[-0.02em]">
           <a href="#legal-disclaimers" className="underline">
             *See legal disclaimers
           </a>

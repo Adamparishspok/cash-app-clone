@@ -32,13 +32,13 @@ export function NavHeader({ theme, menuOpen, onMenuToggle }: NavHeaderProps) {
             /*
              * The lockup path is a rounded-square frame with the $ as an
              * evenodd hole; the rect shows through the hole.
-             * Hero (green bg): green frame blends in → white $ glyph.
-             * Light (white bg): the same colors read as a green chip + white $.
+             * Hero (green bg): green frame blends in → black $ glyph.
+             * Light (white bg): green chip + white $ (rect goes white).
              * Dark (black bg): green chip + black $ (rect goes black).
              */
-            activeTheme === "dark"
-              ? "[&_rect]:fill-black [&_path]:fill-[#00e013]"
-              : "[&_rect]:fill-white [&_path]:fill-[#00e013]"
+            activeTheme === "light"
+              ? "[&_rect]:fill-white [&_path]:fill-[#00e013]"
+              : "[&_rect]:fill-black [&_path]:fill-[#00e013]"
           )}
         />
       </Link>

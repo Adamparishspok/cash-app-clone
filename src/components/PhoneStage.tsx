@@ -108,18 +108,12 @@ export function PhoneStage({ activeId, items }: PhoneStageProps) {
 
       {/*
        * Frame geometry + shadow from the original bundle: height 80vh,
-       * aspect-ratio 0.462141, drop-shadow(0 4px 100px) at 10% black (20% on
-       * dark sections). The shadow tracks the videos' alpha, so an empty
-       * frame renders nothing.
+       * aspect-ratio 0.462141. Homepage sections use the intensified
+       * portal shadow variant: drop-shadow(0 4px 100px) at 20% black.
        */}
       <div
         className="relative"
-        style={{
-          filter:
-            active?.theme === "dark"
-              ? "drop-shadow(0 4px 100px rgba(0,0,0,0.2))"
-              : "drop-shadow(0 4px 100px rgba(0,0,0,0.1))",
-        }}
+        style={{ filter: "drop-shadow(0 4px 100px rgba(0,0,0,0.2))" }}
       >
         {/* frame clip stays phone-shaped so a travelling mask edge never
             exposes square corners */}

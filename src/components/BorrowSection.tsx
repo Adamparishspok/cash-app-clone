@@ -94,7 +94,7 @@ export function BorrowSection({ active }: BorrowSectionProps) {
         </GalleryButton>
       </div>
 
-      <div className="col-span-12 col-start-1 mt-[7vh] grid grid-cols-4 gap-5">
+      <div className="col-span-12 col-start-1 mt-[clamp(32px,9vh,84px)] grid grid-cols-4 gap-5">
         <div
           ref={(el) => {
             cardRefs.current[0] = el;
@@ -109,7 +109,7 @@ export function BorrowSection({ active }: BorrowSectionProps) {
               loop
               playsInline
               preload="auto"
-              className="aspect-[345/271] w-full rounded-[12.5%/16%] object-cover"
+              className="aspect-[0.863402] w-full rounded-[15.9%/13%] object-cover [@media(max-height:760px)]:aspect-[1.275] [@media(max-height:760px)]:rounded-[12.5%/16%]"
             />
             <button
               type="button"
@@ -124,7 +124,7 @@ export function BorrowSection({ active }: BorrowSectionProps) {
               )}
             </button>
           </div>
-          <p className="mt-3 max-w-[80%] text-[1em] leading-[1.4] tracking-[-0.03em]">
+          <p className="mt-3 max-w-[80%] text-[1.125em] leading-[1.4] tracking-[-0.03em]">
             Get free overdraft coverage up to $200*
           </p>
         </div>
@@ -139,9 +139,9 @@ export function BorrowSection({ active }: BorrowSectionProps) {
             <img
               src={card.src}
               alt={card.alt}
-              className="aspect-[345/271] w-full rounded-[12.5%/16%] object-cover"
+              className="aspect-[0.863402] w-full rounded-[15.9%/13%] object-cover [@media(max-height:760px)]:aspect-[1.275] [@media(max-height:760px)]:rounded-[12.5%/16%]"
             />
-            <p className="mt-3 max-w-[80%] text-[1em] leading-[1.4] tracking-[-0.03em]">
+            <p className="mt-3 max-w-[80%] text-[1.125em] leading-[1.4] tracking-[-0.03em]">
               {card.caption}
             </p>
           </div>
@@ -150,7 +150,7 @@ export function BorrowSection({ active }: BorrowSectionProps) {
 
       <a
         href="#legal-disclaimers"
-        className="absolute bottom-[3vh] left-[max(20px,calc((100vw-1440px)/2))] text-[0.75em] leading-[1.2] tracking-[-0.02em] underline"
+        className="absolute bottom-[3vh] left-5 text-[0.75em] leading-[1.2] tracking-[-0.02em] underline"
       >
         *See legal disclaimers
       </a>

@@ -15,12 +15,13 @@ import { GalleryButton } from "@/components/GalleryButton";
  */
 const OPEN_ROTATIONS = [-82.5, -75, -60, -45, -30, -15];
 
+/* DOM order matches the live site: glitter, black, pink, white, glow, mood */
 const cards = [
   { src: "/images/cards/glitter.webp", alt: "Glitter Cash App Card design" },
+  { src: "/images/cards/black.webp", alt: "Black Cash App Card design" },
   { src: "/images/cards/pink.webp", alt: "Pink Cash App Card design" },
   { src: "/images/cards/white.webp", alt: "White Cash App Card design" },
   { src: "/images/cards/glow.webp", alt: "Glow Cash App Card design" },
-  { src: "/images/cards/black.webp", alt: "Black Cash App Card design" },
   { src: "/images/cards/mood.webp", alt: "Holographic Cash App Card design" },
 ];
 
@@ -102,7 +103,7 @@ export function CardFanSection() {
         </GalleryButton>
       </div>
 
-      <p className="absolute bottom-[3vh] left-[max(20px,calc((100vw-1440px)/2))] text-[0.75em] leading-[1.2] tracking-[-0.02em]">
+      <p className="absolute bottom-[3vh] left-5 text-[0.75em] leading-[1.2] tracking-[-0.02em]">
         <a href="#legal-disclaimers" className="underline">
           *See legal disclaimers
         </a>
