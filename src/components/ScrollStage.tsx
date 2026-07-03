@@ -115,7 +115,6 @@ export function ScrollStage({
       const clamped = Math.max(0, Math.min(tops.length - 1, index));
       if (clamped === activeRef.current && !force) return;
       activeRef.current = clamped;
-      setActiveIndex(clamped);
 
       const from = el.scrollTop;
       const to = tops[clamped];
@@ -130,12 +129,23 @@ export function ScrollStage({
        */
       let start: number | null = null;
       let last: number | null = null;
+      let committed = false;
       const step = (now: number) => {
         if (start === null) start = now;
         if (last !== null && now - last > 64) start += now - last - 64;
         last = now;
         const t = Math.min(1, (now - start) / duration);
         el.scrollTop = from + (to - from) * quadInOut(t);
+        if (!committed) {
+          /*
+           * Commit the React state flip AFTER the first motion frame is
+           * written: the section re-render (the session's priciest commit
+           * on a cold run) then lands between animation frames instead of
+           * in front of them — no freeze-then-move on the first input.
+           */
+          committed = true;
+          setActiveIndex(clamped);
+        }
         if (t < 1) {
           animRef.current = requestAnimationFrame(step);
         } else {
@@ -271,7 +281,13 @@ export function ScrollStage({
         data-theme={themed.theme}
       >
         {overlay}
-        <div ref={containerRef} className="no-scrollbar relative h-full overflow-y-auto">
+        {/*
+         * overflow HIDDEN, exactly like the original smooth-scroll-manager:
+         * programmatic scrollTop still works, but no input path (compositor
+         * wheel races on first gesture, non-cancelable momentum events,
+         * scrollbars) can ever scroll it natively — only the tween moves it.
+         */}
+        <div ref={containerRef} className="no-scrollbar relative h-full overflow-hidden">
           {sections.map((section, i) => (
             <section
               key={section.id}
