@@ -122,14 +122,18 @@ export function ScrollStage({
       const duration = snapDuration(Math.abs(to - from), el.clientHeight);
       if (animRef.current !== null) cancelAnimationFrame(animRef.current);
       /*
-       * Clock starts on the first painted frame, not at call time: the
-       * first snap of a session also pays for theme/render/video-start
-       * work, and a pre-stamped start time would make the tween skip
-       * ahead by that setup cost on frame one.
+       * The clock starts on the first painted frame, and any frame gap
+       * beyond 64ms is absorbed into the start time: cold-run jank (layer
+       * rasterization, video decode on the session's first scroll) then
+       * stretches the tween slightly instead of making the scroll leap
+       * to catch up — distance never skips, whatever the frame rate.
        */
       let start: number | null = null;
+      let last: number | null = null;
       const step = (now: number) => {
         if (start === null) start = now;
+        if (last !== null && now - last > 64) start += now - last - 64;
+        last = now;
         const t = Math.min(1, (now - start) / duration);
         el.scrollTop = from + (to - from) * quadInOut(t);
         if (t < 1) {

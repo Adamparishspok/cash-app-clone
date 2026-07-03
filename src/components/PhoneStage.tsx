@@ -133,7 +133,7 @@ export function PhoneStage({ activeId, items }: PhoneStageProps) {
               muted={item.hasAudio ? muted : true}
               loop
               playsInline
-              preload="metadata"
+              preload="auto"
               className="absolute inset-0 h-full w-full object-cover opacity-0 [will-change:mask-position,opacity]"
               style={{
                 maskImage: PHONE_MASK,

@@ -92,7 +92,7 @@ export function HeroSection({ active }: HeroSectionProps) {
        */}
       <div
         ref={panelRef}
-        className="absolute -top-[160px] right-0 left-0 h-[calc(100%+160px)] bg-[#00E013] [will-change:mask-size]"
+        className="absolute -top-[160px] right-0 left-0 h-[calc(100%+160px)] bg-[#00E013] [will-change:mask-size,transform]"
         style={{
           maskImage: PHONE_MASK,
           WebkitMaskImage: PHONE_MASK,
@@ -102,6 +102,9 @@ export function HeroSection({ active }: HeroSectionProps) {
           WebkitMaskPosition: "50%",
           maskMode: "alpha",
           maskSize: `${MASK_W * 40}px ${MASK_H * 40}px`,
+          // pre-promote the compositor layer so its first rasterization
+          // doesn't land mid-tween on the session's first scroll
+          transform: "translateY(0)",
         }}
       />
       {/*
